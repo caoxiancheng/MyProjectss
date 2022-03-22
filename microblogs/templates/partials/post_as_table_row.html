@@ -9,7 +9,7 @@
         {{ post.author.full_name }}
       </span>
       <span class="post-author-user-details">
-        {{ post.author.username }}
+        <a href="{% url 'show_user' post.author.id %}">{{ post.author.username }}</a>
         &nbsp;&middot;&nbsp;
         {{ post.created_at|naturaltime }}
       </span>
