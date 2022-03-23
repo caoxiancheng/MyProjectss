@@ -30,4 +30,5 @@ urlpatterns = [
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('user/<int:user_id>', views.ShowUserView.as_view(), name='show_user'),
     path('users/', views.UserListView.as_view(), name='user_list'),
+    path('activate/<uidb64>/<token>/',views.ActivateView, name='activate'), 
 ]
