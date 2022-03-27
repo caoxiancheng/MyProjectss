@@ -13,8 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from xml.dom.minidom import Document
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from microblogs import views
 
 urlpatterns = [
@@ -30,4 +33,7 @@ urlpatterns = [
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
     path('user/<int:user_id>', views.ShowUserView.as_view(), name='show_user'),
     path('users/', views.UserListView.as_view(), name='user_list'),
-]
+    path('activate/<uidb64>/<token>/',views.ActivateView, name='activate'), 
+    path('post/<int:pk>/comment', views.NewCommentView.as_view(), name='add_comment'),
+    path('like/<int:pk>', views.LikeView, name='like_post'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

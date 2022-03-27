@@ -1,8 +1,21 @@
 """Forms for the microblogs app."""
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
-from .models import User, Post
+from .models import User, Post, Comment
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 class LogInForm(forms.Form):
     """Form enabling registered users to log in."""
@@ -28,7 +41,7 @@ class UserForm(forms.ModelForm):
         """Form options."""
 
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'bio']
+        fields = ['first_name', 'last_name', 'username', 'email', 'profile_pic', 'bio']
         widgets = { 'bio': forms.Textarea() }
 
 class NewPasswordMixin(forms.Form):
@@ -100,7 +113,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
 
     def save(self):
         """Create a new user."""
-
         super().save(commit=False)
         user = User.objects.create_user(
             self.cleaned_data.get('username'),
@@ -109,9 +121,9 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
             email=self.cleaned_data.get('email'),
             bio=self.cleaned_data.get('bio'),
             password=self.cleaned_data.get('new_password'),
+            is_active=False,
         )
         return user
-
 
 class PostForm(forms.ModelForm):
     """Form to ask user for post text.
@@ -123,7 +135,21 @@ class PostForm(forms.ModelForm):
         """Form options."""
 
         model = Post
-        fields = ['text']
+        fields = ['text', 'header_image']
         widgets = {
             'text': forms.Textarea()
+        }
+
+class CommentForm(forms.ModelForm):
+    """Form to for comment text.
+    """
+
+    class Meta:
+        """Form options."""
+
+        model = Comment
+        fields = ['name', 'body']
+        widgets = {
+            'name': forms.TextInput(),
+            'body': forms.Textarea()
         }

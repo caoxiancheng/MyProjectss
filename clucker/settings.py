@@ -128,6 +128,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -151,3 +154,12 @@ MESSAGE_TAGS = {
 # Page lengths
 USERS_PER_PAGE = 10
 POSTS_PER_PAGE = 20
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  
+MAILER_EMAIL_BACKEND = EMAIL_BACKEND  
+EMAIL_HOST = 'smtp.163.com'  
+EMAIL_HOST_PASSWORD = 'LDIFKSXKVABMBEHL'  
+EMAIL_HOST_USER = 'lchenhui666@163.com'  
+EMAIL_PORT = 465  
+EMAIL_USE_SSL = True  
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

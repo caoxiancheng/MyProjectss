@@ -1,7 +1,11 @@
 {% load humanize %}
 <tr>
   <td>
-    <img src="{{ post.author.mini_gravatar }}" alt="Gravatar of author {{ post.author.username }}" class="rounded-circle">
+    {% if post.author.profile_pic%}
+      <img src="{{ post.author.profile_pic.url }}" alt="Gravatar of author {{ post.author.username }}" class="rounded-circle profile-image">
+    {%else%}
+      <img src="{{ post.author.mini_gravatar }}" alt="Gravatar of author {{ post.author.username }}" class="rounded-circle">
+    {%endif%}
   </td>
   <td>
     <p class="post-author">
@@ -9,13 +13,40 @@
         {{ post.author.full_name }}
       </span>
       <span class="post-author-user-details">
-        {{ post.author.username }}
+        <a href="{% url 'show_user' post.author.id %}">{{ post.author.username }}</a>
         &nbsp;&middot;&nbsp;
         {{ post.created_at|naturaltime }}
+
+        <form action="{%url 'like_post' post.pk%}" method="POST">
+          {% csrf_token%}
+          <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm">Like</button>
+          {{post.total_likes}}
+        </form>  
       </span>
     </p>
+    {%if post.header_image%}
+      <img src="../../..{{post.header_image.url}}" style="width:500px;height:300px;">
+    {%endif%}
+  </br>
     <p class="post-text">
       {{ post.text }}
     </p>
+    </br>
+    <h5>Comments</h5>
+    {%if not post.comments.all%}
+      No Comments <a href="{%url 'add_comment' post.pk%}">Add one</a>
+    {%else%}
+      {%for comment in post.comments.all%}
+        <strong>
+          {{comment.name}}
+          {{comment.created_at}}
+        </strong>
+        <br/>
+        {{comment.body}}
+        <br/>
+        <hr>
+      {%endfor%}
+      <a href="{% url 'add_comment' post.pk %}">Add Comment</a>
+    {%endif%}
   </td>
 </tr>
