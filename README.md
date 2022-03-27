@@ -1,6 +1,6 @@
 # Clucker++
 
-##Introduction
+## Introduction
 This is an advanced version of Cluker. 
 Clucker++ is an web app that allow users to post blogs, like recording life and mood, view other people's pernal pages and socialize with people.
 
