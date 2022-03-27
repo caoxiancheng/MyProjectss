@@ -8,7 +8,7 @@ class UserAdmin(admin.ModelAdmin):
     """Configuration of the admin interface for users."""
 
     list_display = [
-        'username', 'first_name', 'last_name', 'email', 'is_active',
+        'username', 'first_name', 'last_name', 'email', 'is_active', "profile_pic"
     ]
 
 @admin.register(Post)

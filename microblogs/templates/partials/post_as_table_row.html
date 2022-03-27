@@ -1,7 +1,11 @@
 {% load humanize %}
 <tr>
   <td>
-    <img src="{{ post.author.mini_gravatar }}" alt="Gravatar of author {{ post.author.username }}" class="rounded-circle">
+    {% if post.author.profile_pic%}
+      <img src="{{ post.author.profile_pic.url }}" alt="Gravatar of author {{ post.author.username }}" class="rounded-circle profile-image">
+    {%else%}
+      <img src="{{ post.author.mini_gravatar }}" alt="Gravatar of author {{ post.author.username }}" class="rounded-circle">
+    {%endif%}
   </td>
   <td>
     <p class="post-author">
@@ -20,6 +24,10 @@
         </form>  
       </span>
     </p>
+    {%if post.header_image%}
+      <img src="../../..{{post.header_image.url}}" style="width:500px;height:300px;">
+    {%endif%}
+  </br>
     <p class="post-text">
       {{ post.text }}
     </p>

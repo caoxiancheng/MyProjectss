@@ -9,14 +9,7 @@ from microblogs.models import Post, Comment
 
 def LikeView(request, pk):
     post = get_object_or_404(Post, id = request.POST.get('post_id'))
-    isliked = False
-    if post.likes.filter(id=request.user.id).exists():
-        post.likes.remove(request.user)
-        isliked=False
-    else:
-        post.likes.add(request.user)
-        isliked=True
-
+    post.likes.add(request.user)
     return HttpResponseRedirect(reverse('feed'))
 
 class NewPostView(LoginRequiredMixin, CreateView):

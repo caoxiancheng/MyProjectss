@@ -41,7 +41,7 @@ class UserForm(forms.ModelForm):
         """Form options."""
 
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'bio']
+        fields = ['first_name', 'last_name', 'username', 'email', 'profile_pic', 'bio']
         widgets = { 'bio': forms.Textarea() }
 
 class NewPasswordMixin(forms.Form):
@@ -135,7 +135,7 @@ class PostForm(forms.ModelForm):
         """Form options."""
 
         model = Post
-        fields = ['text']
+        fields = ['text', 'header_image']
         widgets = {
             'text': forms.Textarea()
         }

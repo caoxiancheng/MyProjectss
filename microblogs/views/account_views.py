@@ -53,13 +53,18 @@ class PasswordView(LoginRequiredMixin, FormView):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """View to update logged-in user's profile."""
 
-    model = UserForm
+    model = User
     template_name = "profile.html"
     form_class = UserForm
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
 
     def get_object(self):
         """Return the object (user) to be updated."""
         user = self.request.user
+        print(user)
         return user
 
     def get_success_url(self):

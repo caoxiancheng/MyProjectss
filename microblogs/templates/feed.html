@@ -4,8 +4,9 @@
   <div class="row">
     <div class="col-xs-12 col-lg-6 col-xl-4">
       {% include 'partials/user_profile.html' with following=False followable=False %}
-      <form action="{% url 'new_post' %}" method="post">
+      <form action="{% url 'new_post' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {{ form.media }}
         {% include 'partials/bootstrap_form.html' with form=form %}
         <button type="submit" class="btn btn-primary">Cluck</button>
       </form>

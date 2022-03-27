@@ -20,6 +20,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50, blank=False)
     email = models.EmailField(unique=True, blank=False)
     bio = models.CharField(max_length=520, blank=True)
+    profile_pic = models.ImageField(null = True, blank = True, upload_to="images")
     followers = models.ManyToManyField(
         'self', symmetrical=False, related_name='followees'
     )
