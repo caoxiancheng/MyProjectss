@@ -12,10 +12,33 @@
         <a href="{% url 'show_user' post.author.id %}">{{ post.author.username }}</a>
         &nbsp;&middot;&nbsp;
         {{ post.created_at|naturaltime }}
+
+        <form action="{%url 'like_post' post.pk%}" method="POST">
+          {% csrf_token%}
+          <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm">Like</button>
+          {{post.total_likes}}
+        </form>  
       </span>
     </p>
     <p class="post-text">
       {{ post.text }}
     </p>
+    </br>
+    <h5>Comments</h5>
+    {%if not post.comments.all%}
+      No Comments <a href="{%url 'add_comment' post.pk%}">Add one</a>
+    {%else%}
+      {%for comment in post.comments.all%}
+        <strong>
+          {{comment.name}}
+          {{comment.created_at}}
+        </strong>
+        <br/>
+        {{comment.body}}
+        <br/>
+        <hr>
+      {%endfor%}
+      <a href="{% url 'add_comment' post.pk %}">Add Comment</a>
+    {%endif%}
   </td>
 </tr>

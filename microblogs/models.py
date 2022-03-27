@@ -79,9 +79,31 @@ class Post(models.Model):
 
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=280)
+    header_image = models.ImageField(null = True, blank = True, upload_to="images/")
     created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name="post_likes")
 
     class Meta:
         """Model options."""
 
         ordering = ['-created_at']
+
+    def total_likes(self):
+        return self.likes.count()
+
+
+class Comment(models.Model):
+
+    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
+    name = models.CharField(max_length=280)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        """Model options."""
+
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return '%s - %s % (self.post.author, self.name)'

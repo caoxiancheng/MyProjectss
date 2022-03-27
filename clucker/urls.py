@@ -31,4 +31,6 @@ urlpatterns = [
     path('user/<int:user_id>', views.ShowUserView.as_view(), name='show_user'),
     path('users/', views.UserListView.as_view(), name='user_list'),
     path('activate/<uidb64>/<token>/',views.ActivateView, name='activate'), 
+    path('post/<int:pk>/comment', views.NewCommentView.as_view(), name='add_comment'),
+    path('like/<int:pk>', views.LikeView, name='like_post'),
 ]

@@ -12,7 +12,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django import forms
 from django.contrib.auth import authenticate
 from django.core.validators import RegexValidator
-from .models import User, Post
+from .models import User, Post, Comment
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -113,8 +113,6 @@ class SignUpForm(NewPasswordMixin, forms.ModelForm):
 
     def save(self):
         """Create a new user."""
-        print("create a user")
-        print(self.cleaned_data)
         super().save(commit=False)
         user = User.objects.create_user(
             self.cleaned_data.get('username'),
@@ -140,4 +138,18 @@ class PostForm(forms.ModelForm):
         fields = ['text']
         widgets = {
             'text': forms.Textarea()
+        }
+
+class CommentForm(forms.ModelForm):
+    """Form to for comment text.
+    """
+
+    class Meta:
+        """Form options."""
+
+        model = Comment
+        fields = ['name', 'body']
+        widgets = {
+            'name': forms.TextInput(),
+            'body': forms.Textarea()
         }

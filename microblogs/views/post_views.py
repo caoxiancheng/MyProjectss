@@ -1,10 +1,23 @@
 """Post creation views."""
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.edit import CreateView
 from django.urls import reverse
-from microblogs.forms import PostForm
-from microblogs.models import Post
+from django.http import HttpResponseRedirect
+from microblogs.forms import PostForm, CommentForm
+from microblogs.models import Post, Comment
+
+def LikeView(request, pk):
+    post = get_object_or_404(Post, id = request.POST.get('post_id'))
+    isliked = False
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+        isliked=False
+    else:
+        post.likes.add(request.user)
+        isliked=True
+
+    return HttpResponseRedirect(reverse('feed'))
 
 class NewPostView(LoginRequiredMixin, CreateView):
     """Class-based generic view for new post handling."""
@@ -25,3 +38,20 @@ class NewPostView(LoginRequiredMixin, CreateView):
 
     def handle_no_permission(self):
         return redirect('log_in')
+
+
+class NewCommentView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'add_comment.html'
+
+    def form_valid(self, form):
+        form.instance.post_id = self.kwargs['pk']
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('feed')
+
+    def handle_no_permission(self):
+        return redirect('log_in')
+
